@@ -1,7 +1,7 @@
-import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { Task, TaskStatus } from '../model/task';
+import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { TaskStatus } from './task';
 
-export class UpdatedTaskDTO {
+export class UpdateTaskDTO {
     @IsString()
     @IsOptional()
     title?: string;
