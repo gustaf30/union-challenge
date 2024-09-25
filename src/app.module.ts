@@ -17,6 +17,7 @@ import { Task } from './task/task';
       database: process.env.POSTGRES_DB,
       entities: [Task],
       synchronize: true,
+      migrations: ["migrations/*{.ts,.js}"],
     }),
     TypeOrmModule.forFeature([Task]),
   ],
