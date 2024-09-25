@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { HttpCode, Injectable } from '@nestjs/common';
 import { CreateTaskDTO } from './create-task-dto';
 import { Task, TaskStatus } from './task';
 import { UpdateTaskDTO } from './update-task-dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Like, Repository } from 'typeorm';
 
 @Injectable()
 export class TaskService {
@@ -29,14 +29,16 @@ export class TaskService {
         return this.taskRepository.findOne({ where: { id } });
     }
 
-    async findAll(status?: TaskStatus): Promise<Task[]> {
+    async findAll(status?: TaskStatus, page?: string, limit?: string): Promise<Task[]> {
         const query = this.taskRepository.createQueryBuilder('task');
 
         if (status) {
             query.andWhere('task.status = :status', { status });
         }
 
-        return await query.getMany();
+        return await query.take(parseInt(limit))
+                            .skip(parseInt(limit) * parseInt(page) - parseInt(limit))
+                            .getMany();
     }
 
     async createTask(createTaskDTO: CreateTaskDTO): Promise<Task> {
@@ -49,6 +51,16 @@ export class TaskService {
         await this.taskRepository.save(task);
         return task;
     }
+
+    async findByTitle(title: string): Promise<Task[]> {
+        const tasks = await this.taskRepository.find({
+            where: {
+                title: ILike(`%${title}%`),
+            },
+        });
+        
+        return tasks;
+    }    
 
     async deleteTask(id: string) : Promise<void> {
         this.taskRepository.softDelete(id);

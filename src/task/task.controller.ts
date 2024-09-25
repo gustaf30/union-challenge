@@ -14,13 +14,18 @@ export class TasksController {
     }
 
     @Get()
-    findAll(@Query('status') status?: TaskStatus) : Promise<Task[]> {
-        return this.taskService.findAll(status);
+    findAll(@Query('status') status?: TaskStatus, @Query('page') page?: string, @Query('limit') limit?: string) : Promise<Task[]> {
+        return this.taskService.findAll(status, page, limit);
     }
 
     @Get(':id')
     findOne(@Param('id') id: string) : Promise<Task> {
         return this.taskService.findOne(id);
+    }
+
+    @Get('search/:title')
+    findByTitle(@Param('title') title: string) : Promise<Task[]> {
+        return this.taskService.findByTitle(title);
     }
 
     @Patch(':id')
