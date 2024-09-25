@@ -3,7 +3,7 @@ import { CreateTaskDTO } from './create-task-dto';
 import { Task, TaskStatus } from './task';
 import { UpdateTaskDTO } from './update-task-dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import { ILike, Like, Repository } from 'typeorm';
 
 @Injectable()
 export class TaskService {
@@ -55,7 +55,7 @@ export class TaskService {
     async findByTitle(title: string): Promise<Task[]> {
         const tasks = await this.taskRepository.find({
             where: {
-                title: Like(`%${title}%`),
+                title: ILike(`%${title}%`),
             },
         });
         
