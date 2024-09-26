@@ -1,4 +1,4 @@
-import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsOptional, IsString, IsDateString } from 'class-validator';
 import { TaskStatus } from './task';
 
 export class UpdateTaskDTO {
@@ -13,4 +13,8 @@ export class UpdateTaskDTO {
     @IsEnum(TaskStatus)
     @IsOptional()
     status?: TaskStatus;
+
+    @IsDateString()
+    @IsOptional()  
+    dueDate?: string;
 }

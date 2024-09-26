@@ -29,11 +29,22 @@ export class TaskService {
         return this.taskRepository.findOne({ where: { id } });
     }
 
-    async findAll(status?: TaskStatus, page?: string, limit?: string): Promise<Task[]> {
+    async findAll(status?: TaskStatus, page?: string, limit?: string, overdue?: boolean): Promise<Task[]> {
         const query = this.taskRepository.createQueryBuilder('task');
 
         if (status) {
             query.andWhere('task.status = :status', { status });
+        }
+
+        if(overdue == undefined) {
+            return await query.getMany();
+        }
+
+        if (overdue) {
+            query.andWhere('task.dueDate < :now', { now: new Date() });
+        }
+        else {
+            query.andWhere(('task.dueDate >= :now OR task.dueDate IS NULL'), { now: new Date() });
         }
 
         if (!page) {
@@ -50,6 +61,7 @@ export class TaskService {
             title: createTaskDTO.title,
             description: createTaskDTO.description,
             status: TaskStatus.PENDING,
+            dueDate: createTaskDTO.dueDate,
         });
 
         await this.taskRepository.save(task);

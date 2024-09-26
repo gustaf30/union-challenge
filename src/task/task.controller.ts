@@ -14,8 +14,9 @@ export class TasksController {
     }
 
     @Get()
-    findAll(@Query('status') status?: TaskStatus, @Query('page') page?: string, @Query('limit') limit?: string) : Promise<Task[]> {
-        return this.taskService.findAll(status, page, limit);
+    findAll(@Query('status') status?: TaskStatus, @Query('page') page?: string, @Query('limit') limit?: string, @Query('overdue') overdue?: string) : Promise<Task[]> {
+        const overdueBool = overdue === 'true' ? true : overdue === 'false' ? false : undefined;
+        return this.taskService.findAll(status, page, limit, overdueBool);
     }
 
     @Get(':id')
