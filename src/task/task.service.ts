@@ -36,6 +36,10 @@ export class TaskService {
             query.andWhere('task.status = :status', { status });
         }
 
+        if (!page) {
+            return await query.getMany();
+        }
+        
         return await query.take(parseInt(limit))
                             .skip(parseInt(limit) * parseInt(page) - parseInt(limit))
                             .getMany();
