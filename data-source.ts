@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { DataSource } from 'typeorm';
-import { Task } from './src/task/task';
+import { Task } from './src/task/entity/task';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',

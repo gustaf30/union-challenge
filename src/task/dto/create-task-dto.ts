@@ -1,5 +1,5 @@
 import { IsEnum, IsNotEmpty, IsOptional, IsString, IsDateString } from 'class-validator';
-import { TaskStatus } from './task';
+import { TaskStatus } from '../entity/task';
 
 export class CreateTaskDTO {
     @IsString()

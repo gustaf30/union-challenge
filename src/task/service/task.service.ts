@@ -1,7 +1,7 @@
 import { HttpCode, Injectable } from '@nestjs/common';
-import { CreateTaskDTO } from './create-task-dto';
-import { Task, TaskStatus } from './task';
-import { UpdateTaskDTO } from './update-task-dto';
+import { CreateTaskDTO } from './dto/create-task-dto';
+import { Task, TaskStatus } from './model/task';
+import { UpdateTaskDTO } from './dto/update-task-dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Like, Repository } from 'typeorm';
 
