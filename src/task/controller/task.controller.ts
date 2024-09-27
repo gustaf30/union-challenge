@@ -39,7 +39,7 @@ export class TasksController {
         return this.taskService.update(id, updateTaskDTO);
     }
 
-    @HttpCode(HttpStatus.GONE)
+    @HttpCode(HttpStatus.ACCEPTED)
     @Delete(':id')
     delete(@Param('id') id: string) {
         return this.taskService.deleteTask(id);
