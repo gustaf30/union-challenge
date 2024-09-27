@@ -35,4 +35,7 @@ export class Task {
 
     @DeleteDateColumn( {nullable: true })
     deletedAt: Date;
+
+    @Column({ type: 'date', nullable: true })
+    dueDate: Date;
 }
