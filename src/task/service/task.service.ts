@@ -47,7 +47,7 @@ export class TaskService {
 
         if (status) query.andWhere('task.status = :status', { status });
 
-        if(overdue == undefined || !page) {
+        if(overdue == undefined) {
             try {
                 const tasks = await query.getMany();
                 return tasks;
@@ -61,6 +61,15 @@ export class TaskService {
         }
         else {
             query.andWhere(('task.dueDate >= :now OR task.dueDate IS NULL'), { now: new Date() });
+        }
+
+        if(!page) {
+            try {
+                const tasks = await query.getMany();
+                return tasks;
+            } catch (error) {
+                throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR)
+            }
         }
 
         try {
