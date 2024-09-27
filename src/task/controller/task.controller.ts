@@ -21,13 +21,13 @@ export class TasksController {
         return this.taskService.findAll(status, overdueBool, page, limit);
     }
 
-    @HttpCode(HttpStatus.FOUND)
+    @HttpCode(HttpStatus.ACCEPTED)
     @Get(':id')
     findOne(@Param('id') id: string) : Promise<Task> {
         return this.taskService.findOne(id);
     }
 
-    @HttpCode(HttpStatus.FOUND)
+    @HttpCode(HttpStatus.ACCEPTED)
     @Get('search/:title')
     findByTitle(@Param('title') title: string) : Promise<Task[]> {
         return this.taskService.findByTitle(title);
