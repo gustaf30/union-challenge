@@ -1,20 +1,20 @@
-import { IsEnum, IsOptional, IsString, IsDateString } from 'class-validator';
+import { IsEnum, IsOptional, IsString, IsDateString, MaxLength, IsNotEmpty } from 'class-validator';
 import { TaskStatus } from '../entity/task.entity';
 
 export class UpdateTaskDTO {
     @IsString()
-    @IsOptional()
+    @IsNotEmpty()
     title?: string;
 
-    @IsString()
     @IsOptional()
+    @IsString()
     description?: string;
 
     @IsEnum(TaskStatus)
     @IsOptional()
     status?: TaskStatus;
 
-    @IsDateString()
-    @IsOptional()  
+    @IsOptional()
+    @IsDateString()  
     dueDate?: string;
 }
