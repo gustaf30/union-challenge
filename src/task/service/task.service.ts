@@ -41,13 +41,21 @@ export class TaskService {
 
     async findAll(status?: TaskStatus, overdue?: boolean, page?: string, limit?: string): Promise<Task[]> {
         const query = this.taskRepository.createQueryBuilder('task');
+        const now = new Date();
 
         if (!page && limit) throw new HttpException('Bad URL', HttpStatus.BAD_REQUEST);
         if (page && !limit) throw new HttpException('Bad URL', HttpStatus.BAD_REQUEST);
 
-        if (status) query.andWhere('task.status = :status', { status });
+        if (status) query.where('task.status = :status', { status });
 
-        if(overdue == undefined) {
+        if (overdue == true) {
+            query.andWhere('task.dueDate < :now', { now: now });
+        }
+        else if (overdue == false) {
+            query.andWhere(('task.dueDate >= :now OR task.dueDate IS NULL'), { now: now });
+        }
+
+        if (overdue == undefined) {
             try {
                 const tasks = await query.getMany();
                 return tasks;
@@ -56,20 +64,8 @@ export class TaskService {
             }
         }
 
-        if (overdue) {
-            query.andWhere('task.dueDate < :now', { now: new Date() });
-        }
-        else {
-            query.andWhere(('task.dueDate >= :now OR task.dueDate IS NULL'), { now: new Date() });
-        }
-
-        if(!page) {
-            try {
-                const tasks = await query.getMany();
-                return tasks;
-            } catch (error) {
-                throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR)
-            }
+        if (!page && !limit && !status && !overdue) {
+            return await query.getMany();
         }
 
         try {
