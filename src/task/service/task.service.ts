@@ -49,9 +49,7 @@ export class TaskService {
 
         if(overdue == undefined) {
             try {
-                const tasks = await query.take(parseInt(limit))
-                                            .skip(parseInt(limit) * parseInt(page) - parseInt(limit))
-                                            .getMany();
+                const tasks = await query.getMany();
                 return tasks;
             } catch (error) {
                 throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR)
