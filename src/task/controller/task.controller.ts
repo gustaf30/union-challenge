@@ -22,7 +22,7 @@ export class TasksController {
     }
 
     @HttpCode(HttpStatus.ACCEPTED)
-    @Get(':id')
+    @Get('find/:id')
     findOne(@Param('id') id: string) : Promise<Task> {
         return this.taskService.findOne(id);
     }
@@ -43,5 +43,11 @@ export class TasksController {
     @Delete(':id')
     delete(@Param('id') id: string) {
         return this.taskService.deleteTask(id);
+    }
+
+    @HttpCode(HttpStatus.ACCEPTED)
+    @Get('count')
+    countTasks() : Promise<number> {
+        return this.taskService.count();
     }
 }

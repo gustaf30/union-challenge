@@ -57,7 +57,9 @@ export class TaskService {
 
         if (overdue == undefined) {
             try {
-                const tasks = await query.getMany();
+                const tasks = await query.take(parseInt(limit))
+                                            .skip(parseInt(limit) * parseInt(page) - parseInt(limit))
+                                            .getMany();
                 return tasks;
             } catch (error) {
                 throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR)
@@ -115,6 +117,17 @@ export class TaskService {
             this.taskRepository.softDelete(id);
         } catch {
             throw new HttpException('Failed to delete task', HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+    async count() : Promise<number> {
+        const query = this.taskRepository.createQueryBuilder('task');
+
+        try {
+            const tasks = await query.getMany();
+            return tasks.length;
+        } catch (error) {
+            throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 }
