@@ -52,20 +52,7 @@ export class TaskService {
             query.andWhere('task.dueDate < :now', { now: now });
         }
         else if (overdue == false) {
-            query.andWhere(('task.dueDate >= :now OR task.dueDate IS NULL'), { now: now });
-        }
-
-        if (overdue == undefined) {
-            try {
-                const tasks = await query.getMany();
-                return tasks;
-            } catch (error) {
-                throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR)
-            }
-        }
-
-        if (!page && !limit && !status && !overdue) {
-            return await query.getMany();
+            query.andWhere('task.dueDate >= :now OR task.dueDate IS NULL', { now });
         }
 
         try {
@@ -115,6 +102,17 @@ export class TaskService {
             this.taskRepository.softDelete(id);
         } catch {
             throw new HttpException('Failed to delete task', HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+    async count() : Promise<number> {
+        const query = this.taskRepository.createQueryBuilder('task');
+
+        try {
+            const tasks = await query.getMany();
+            return tasks.length;
+        } catch (error) {
+            throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 }
